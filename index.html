@@ -1,0 +1,151 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<title>TESSELLATE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="TESSELLATE: source catalogues from an untargeted search of every TESS full-frame image. Asteroid rotation and shape, stellar flares, and more to come.">
+<link rel="icon" href="assets/favicon.svg?v=4" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Azeret+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/site.css?v=8">
+
+<header class="bar"><div class="in">
+  <a class="brand" href="#top"><img src="assets/logo.svg?v=4" alt="">TESSELLATE</a>
+  <nav>
+    <a href="#catalogues">Catalogues</a>
+    <a href="#results">Results</a>
+    <a class="opt" href="#pipeline">Pipeline</a>
+    <a href="#team">Team</a>
+    <a class="opt" href="#cite">Cite</a>
+  </nav>
+</div></header>
+
+<main id="top">
+  <section class="hero">
+    <div class="lockup">
+      <img class="mark" src="assets/logo.svg?v=4" alt="TESSELLATE logo: the TESS camera footprints tiled around the ecliptic pole">
+      <h1>TESSELLATE</h1>
+    </div>
+    <p class="tag">Source catalogues from an untargeted search of every TESS full-frame image</p>
+    <p class="lede">TESS tiles the sky with four cameras, sector after sector, watching each field continuously for about a month. TESSELLATE searches the difference images of every full-frame image for anything that changes, with no target list, and turns what it finds into public catalogues: asteroids crossing the field, flares on nearby stars and, in preparation, variable stars, transients and exoplanets.</p>
+  </section>
+
+  <section id="catalogues">
+    <h2>Catalogues</h2>
+    <p class="note">Each catalogue has its own site with search, per-object pages and downloadable data products.</p>
+    <!-- one panel per catalogue: hero picture left, summary right; a live panel is one link -->
+    <div class="cards">
+      <a class="card c-asteroid" href="https://cheerfuluser.github.io/tessellate_asteroid/">
+        <div class="pic"><img src="assets/hero_asteroid.png?v=2" alt="Render of the non-convex shape model of (32) Pomona"></div>
+        <div class="txt">
+          <p class="eyebrow">Live &middot; sectors <span data-k="asteroid.sectors">&hellip;</span></p>
+          <h3>Asteroid rotation &amp; shape</h3>
+          <p>Rotation periods, phase-folded lightcurves and convex shape models for asteroids crossing the TESS fields. Weeks of unbroken coverage recover slow rotators that are hard to close from the ground.</p>
+          <div class="nums">
+            <div><div class="v" data-k="asteroid.periods">&hellip;</div><div class="l">rotation periods</div></div>
+            <div><div class="v" data-k="asteroid.shape_models">&hellip;</div><div class="l">shape models</div></div>
+            <div><div class="v" data-k="asteroid.no_prior_period">&hellip;</div><div class="l">no published period before</div></div>
+          </div>
+          <span class="go">Open the asteroid catalogue &rarr;</span>
+        </div>
+      </a>
+      <a class="card c-flare" href="https://hughroxburgh.github.io/tessellate_flares/">
+        <div class="pic"><img src="https://hughroxburgh.github.io/tessellate_flares/assets/fig_stack.png" alt="Simple flares stacked on a common time and flux scale"></div>
+        <div class="txt">
+          <p class="eyebrow">Live &middot; sectors <span data-k="flares.sectors">&hellip;</span></p>
+          <h3>Stellar flares</h3>
+          <p>Flares detected in the TESS difference images and matched to their Gaia host stars, with each star's full light curve, every flare's fitted shape and classification, and where on the sky each flare came from.</p>
+          <div class="nums">
+            <div><div class="v" data-k="flares.stars">&hellip;</div><div class="l">flare stars</div></div>
+            <div><div class="v" data-k="flares.flares">&hellip;</div><div class="l">flares</div></div>
+            <div><div class="v" data-k="flares.gold">&hellip;</div><div class="l">gold flares</div></div>
+          </div>
+          <span class="go">Open the flare catalogue &rarr;</span>
+        </div>
+      </a>
+      <div class="card soon c-variable">
+        <div class="pic"><span class="status">In preparation</span></div>
+        <div class="txt">
+          <p class="eyebrow">Coming</p>
+          <h3>Variable stars</h3>
+          <p>Periodic and irregular variable stars across the TESS sky.</p>
+        </div>
+      </div>
+      <div class="card soon c-transient">
+        <div class="pic"><span class="status">In preparation</span></div>
+        <div class="txt">
+          <p class="eyebrow">Coming</p>
+          <h3>Transients</h3>
+          <p>Extragalactic and Galactic transients found in the TESS full-frame images.</p>
+        </div>
+      </div>
+      <div class="card soon c-exoplanet">
+        <div class="pic"><span class="status">In preparation</span></div>
+        <div class="txt">
+          <p class="eyebrow">Coming</p>
+          <h3>Exoplanets</h3>
+          <p>Exoplanet candidates from the TESSELLATE light curves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="results">
+    <h2>Results</h2>
+    <!-- one .paper per TESSELLATE result, newest first -->
+    <div class="papers">
+      <a class="paper" href="https://arxiv.org/abs/2608.17242">
+        <p class="eyebrow">2026 &middot; arXiv:2608.17242</p>
+        <h3>AT 2020afjz (TSS2020a): The First Fast Extragalactic Transient Discovered by TESS</h3>
+        <p>Ridden-Harper, R., Roxburgh, H., et al.</p>
+      </a>
+      <a class="paper" href="https://ui.adsabs.harvard.edu/abs/2025AJ....170..186R/abstract">
+        <p class="eyebrow">2025 &middot; AJ, 170, 186</p>
+        <h3>TESSELLATE: Piecing Together the Variable Sky With TESS</h3>
+        <p>Roxburgh, H., Ridden-Harper, R., et al.</p>
+      </a>
+    </div>
+  </section>
+
+  <section id="pipeline">
+    <h2>Pipeline</h2>
+    <p class="note">Every catalogue starts from the same reduction, so the photometry, detections and quality flags are consistent across them.</p>
+    <div class="flow">
+      <div><b>TESS full-frame images</b>Every camera, every sector, from the TESS archive.</div>
+      <div><b>TESSreduce</b>Background subtraction, alignment and difference imaging (<a href="https://arxiv.org/abs/2111.15006">Ridden-Harper et al. 2021</a>).</div>
+      <div><b>TESSELLATE</b>Untargeted detection and classification of every change in the difference images (<a href="https://ui.adsabs.harvard.edu/abs/2025AJ....170..186R/abstract">Roxburgh et al. 2025</a>).</div>
+      <div><b>Catalogues</b>Science-specific measurement and vetting for each source class, published as searchable sites.</div>
+    </div>
+  </section>
+
+  <section id="team">
+    <h2>Team</h2>
+    <!-- one .person per member: name, role in TESSELLATE, affiliation -->
+    <div class="team">
+      <div class="person"><div class="n">Ryan Ridden</div><div class="r">Programme lead; asteroid rotation &amp; shape catalogue</div><div class="a">University of Canterbury</div></div>
+      <div class="person"><div class="n">Hugh Roxburgh</div><div class="r">TESSELLATE pipeline; stellar flare catalogue</div><div class="a">PhD student, Curtin University</div></div>
+    </div>
+  </section>
+
+  <section id="cite">
+    <h2>Citing TESSELLATE</h2>
+    <p class="note">If you use a TESSELLATE catalogue, please cite the pipeline papers below, and the catalogue's own reference where its site gives one.</p>
+    <div class="cite">
+      <p><b>TESSELLATE</b> &mdash; Roxburgh et al. 2025, AJ, 170, 186. <a href="https://ui.adsabs.harvard.edu/abs/2025AJ....170..186R/abstract">ADS</a></p>
+      <p><b>TESSreduce</b> &mdash; Ridden-Harper et al. 2021, arXiv:2111.15006. <a href="https://arxiv.org/abs/2111.15006">arXiv</a></p>
+    </div>
+  </section>
+
+  <footer>This work uses data collected by the TESS mission, funded by NASA's Science Mission Directorate, and obtained from MAST. Processing was performed on the OzSTAR national facility at Swinburne University of Technology, funded in part by the Australian Government (NCRIS) and the Victorian Government (VHESIF). &middot; Numbers updated <span data-k="updated">&hellip;</span></footer>
+</main>
+
+<script src="assets/sky.js?v=2"></script>
+<script>
+// headline numbers from data/catalogs.json, refreshed by tools/update_stats.py from the catalogue sites
+const fmt = v => Array.isArray(v) ? v.join('–') : typeof v === 'number' ? v.toLocaleString('en') : v;
+fetch('data/catalogs.json?v=1').then(r => r.json()).then(j => {
+  document.querySelectorAll('[data-k]').forEach(e => {
+    const v = e.dataset.k.split('.').reduce((o, k) => o == null ? o : o[k], j);
+    e.textContent = v == null ? '—' : fmt(v);
+  });
+}).catch(() => document.querySelectorAll('[data-k]').forEach(e => e.textContent = '—'));
+</script>

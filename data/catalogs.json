@@ -1,0 +1,25 @@
+{
+ "updated": "2026-11-09",
+ "asteroid": {
+  "periods": 16427,
+  "shape_models": 14768,
+  "nonconvex": null,
+  "no_prior_period": 12068,
+  "longer_than_day": 3255,
+  "sectors": [
+   27,
+   55
+  ]
+ },
+ "flares": {
+  "stars": 73082,
+  "flares": 184720,
+  "gold": 133118,
+  "silver_sources": 29761,
+  "sectors": [
+   27,
+   55
+  ],
+  "build": "2026-10-29"
+ }
+}
