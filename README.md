@@ -1,6 +1,7 @@
-# TESSELLATE
+# TESSELLATE Sky Survey (TSS)
 
-Landing page for the TESSELLATE source catalogs: an untargeted search of every TESS full-frame image.
+Landing page for the TESSELLATE Sky Survey (TSS): source catalogs from an untargeted search of every TESS
+full-frame image with the TESSELLATE pipeline.
 Links the live catalog sites and holds placeholders for those in preparation.
 
 | catalog | site |

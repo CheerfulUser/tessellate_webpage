@@ -1,4 +1,4 @@
-"""TESSELLATE logo: the TESS camera footprints of one hemisphere, seen from the ecliptic pole.
+"""TESSELLATE Sky Survey (TSS) logo: the TESS camera footprints of one hemisphere, seen from the ecliptic pole.
 
 Nominal TESS observing geometry (Ricker et al. 2015): each sector points a strip of four
 24 x 24 deg cameras along one ecliptic meridian, with boresights at ecliptic latitudes 18, 42, 66
@@ -75,7 +75,7 @@ def tiles(colors):
 
 def svg(body, hw, hh):
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{-hw} {-hh} {2 * hw} {2 * hh}" '
-            f'role="img" aria-label="TESSELLATE">\n' + '\n'.join(body) + '\n</svg>\n')
+            f'role="img" aria-label="TESSELLATE Sky Survey">\n' + '\n'.join(body) + '\n</svg>\n')
 
 
 def main(variant='catalog'):
