@@ -1,7 +1,7 @@
 <!doctype html><html lang="en"><meta charset="utf-8">
 <title>TESSELLATE</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="TESSELLATE: source catalogues from an untargeted search of every TESS full-frame image. Asteroid rotation and shape, stellar flares, and more to come.">
+<meta name="description" content="TESSELLATE: source catalogs from an untargeted search of every TESS full-frame image. Asteroid rotation and shape, stellar flares, and more to come.">
 <link rel="icon" href="assets/favicon.svg?v=4" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
 <header class="bar"><div class="in">
   <a class="brand" href="#top"><img src="assets/logo.svg?v=4" alt="">TESSELLATE</a>
   <nav>
-    <a href="#catalogues">Catalogues</a>
+    <a href="#catalogs">Catalogs</a>
     <a href="#results">Results</a>
     <a class="opt" href="#pipeline">Pipeline</a>
     <a href="#team">Team</a>
@@ -25,14 +25,14 @@
       <img class="mark" src="assets/logo.svg?v=4" alt="TESSELLATE logo: the TESS camera footprints tiled around the ecliptic pole">
       <h1>TESSELLATE</h1>
     </div>
-    <p class="tag">Source catalogues from an untargeted search of every TESS full-frame image</p>
-    <p class="lede">TESS tiles the sky with four cameras, sector after sector, watching each field continuously for about a month. TESSELLATE searches the difference images of every full-frame image for anything that changes, with no target list, and turns what it finds into public catalogues: asteroids crossing the field, flares on nearby stars and, in preparation, variable stars, transients and exoplanets.</p>
+    <p class="tag">Source catalogs from an untargeted search of every TESS full-frame image</p>
+    <p class="lede">TESS tiles the sky with four cameras, sector after sector, watching each field continuously for about a month. TESSELLATE searches the difference images of every full-frame image for anything that changes, with no target list, and turns what it finds into public catalogs: asteroids crossing the field, flares on nearby stars and, in preparation, variable stars, transients and exoplanets.</p>
   </section>
 
-  <section id="catalogues">
-    <h2>Catalogues</h2>
-    <p class="note">Each catalogue has its own site with search, per-object pages and downloadable data products.</p>
-    <!-- one panel per catalogue: hero picture left, summary right; a live panel is one link -->
+  <section id="catalogs">
+    <h2>Catalogs</h2>
+    <p class="note">Each catalog has its own site with search, per-object pages and downloadable data products.</p>
+    <!-- one panel per catalog: hero picture left, summary right; a live panel is one link -->
     <div class="cards">
       <a class="card c-asteroid" href="https://cheerfuluser.github.io/tessellate_asteroid/">
         <div class="pic"><img src="assets/hero_asteroid.png?v=2" alt="Render of the non-convex shape model of (32) Pomona"></div>
@@ -45,7 +45,7 @@
             <div><div class="v" data-k="asteroid.shape_models">&hellip;</div><div class="l">shape models</div></div>
             <div><div class="v" data-k="asteroid.no_prior_period">&hellip;</div><div class="l">no published period before</div></div>
           </div>
-          <span class="go">Open the asteroid catalogue &rarr;</span>
+          <span class="go">Open the asteroid catalog &rarr;</span>
         </div>
       </a>
       <a class="card c-flare" href="https://hughroxburgh.github.io/tessellate_flares/">
@@ -59,7 +59,7 @@
             <div><div class="v" data-k="flares.flares">&hellip;</div><div class="l">flares</div></div>
             <div><div class="v" data-k="flares.gold">&hellip;</div><div class="l">gold flares</div></div>
           </div>
-          <span class="go">Open the flare catalogue &rarr;</span>
+          <span class="go">Open the flare catalog &rarr;</span>
         </div>
       </a>
       <div class="card soon c-variable">
@@ -108,12 +108,12 @@
 
   <section id="pipeline">
     <h2>Pipeline</h2>
-    <p class="note">Every catalogue starts from the same reduction, so the photometry, detections and quality flags are consistent across them.</p>
+    <p class="note">Every catalog starts from the same reduction, so the photometry, detections and quality flags are consistent across them.</p>
     <div class="flow">
       <div><b>TESS full-frame images</b>Every camera, every sector, from the TESS archive.</div>
       <div><b>TESSreduce</b>Background subtraction, alignment and difference imaging (<a href="https://arxiv.org/abs/2111.15006">Ridden-Harper et al. 2021</a>).</div>
       <div><b>TESSELLATE</b>Untargeted detection and classification of every change in the difference images (<a href="https://ui.adsabs.harvard.edu/abs/2025AJ....170..186R/abstract">Roxburgh et al. 2025</a>).</div>
-      <div><b>Catalogues</b>Science-specific measurement and vetting for each source class, published as searchable sites.</div>
+      <div><b>Catalogs</b>Science-specific measurement and vetting for each source class, published as searchable sites.</div>
     </div>
   </section>
 
@@ -121,14 +121,14 @@
     <h2>Team</h2>
     <!-- one .person per member: name, role in TESSELLATE, affiliation -->
     <div class="team">
-      <div class="person"><div class="n">Ryan Ridden</div><div class="r">Programme lead; asteroid rotation &amp; shape catalogue</div><div class="a">University of Canterbury</div></div>
-      <div class="person"><div class="n">Hugh Roxburgh</div><div class="r">TESSELLATE pipeline; stellar flare catalogue</div><div class="a">PhD student, Curtin University</div></div>
+      <div class="person"><div class="n">Ryan Ridden</div><div class="r">Program lead; asteroid rotation &amp; shape catalog</div><div class="a">University of Canterbury</div></div>
+      <div class="person"><div class="n">Hugh Roxburgh</div><div class="r">TESSELLATE pipeline; stellar flare catalog</div><div class="a">PhD student, Curtin University</div></div>
     </div>
   </section>
 
   <section id="cite">
     <h2>Citing TESSELLATE</h2>
-    <p class="note">If you use a TESSELLATE catalogue, please cite the pipeline papers below, and the catalogue's own reference where its site gives one.</p>
+    <p class="note">If you use a TESSELLATE catalog, please cite the pipeline papers below, and the catalog's own reference where its site gives one.</p>
     <div class="cite">
       <p><b>TESSELLATE</b> &mdash; Roxburgh et al. 2025, AJ, 170, 186. <a href="https://ui.adsabs.harvard.edu/abs/2025AJ....170..186R/abstract">ADS</a></p>
       <p><b>TESSreduce</b> &mdash; Ridden-Harper et al. 2021, arXiv:2111.15006. <a href="https://arxiv.org/abs/2111.15006">arXiv</a></p>
@@ -140,7 +140,7 @@
 
 <script src="assets/sky.js?v=2"></script>
 <script>
-// headline numbers from data/catalogs.json, refreshed by tools/update_stats.py from the catalogue sites
+// headline numbers from data/catalogs.json, refreshed by tools/update_stats.py from the catalog sites
 const fmt = v => Array.isArray(v) ? v.join('–') : typeof v === 'number' ? v.toLocaleString('en') : v;
 fetch('data/catalogs.json?v=1').then(r => r.json()).then(j => {
   document.querySelectorAll('[data-k]').forEach(e => {

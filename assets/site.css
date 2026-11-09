@@ -1,14 +1,14 @@
-/* TESSELLATE landing page. Same layout tokens as the catalogue sites
+/* TESSELLATE landing page. Same layout tokens as the catalog sites
    (cheerfuluser.github.io/tessellate_asteroid, hughroxburgh.github.io/tessellate_flares) and the flare
    site's type (Instrument Sans + Azeret Mono, linked in the page head). Dark only, like both.
-   Each catalogue keeps its own accent: asteroids purple, flares red; the placeholders take the
-   remaining logo colours (variable stars teal, transients orange) and exoplanets green. No yellow. */
+   Each catalog keeps its own accent: asteroids purple, flares red; the placeholders take the
+   remaining logo colors (variable stars teal, transients orange) and exoplanets green. No yellow. */
 :root {
   --bg:#000; --panel:#12161f; --panel-border:#232936; --hairline:#1c212c;
   --text:#e8ecf3; --text-dim:#8f99ab; --text-faint:#5d6779;
   --accent:#8fb4e6; --input-bg:#141a26; --fig-bg:#0f141c; --warn:#e0a458;
   --c-asteroid:#a78bfa; --c-flare:#ff7b7b; --c-variable:#5ec8b4; --c-transient:#e09a5a; --c-exoplanet:#7fd18b;
-  /* per-catalogue colour; the .c-* classes override it */
+  /* per-catalog color; the .c-* classes override it */
   --c:var(--accent);
 }
 *{box-sizing:border-box}
@@ -49,7 +49,7 @@ p.note{color:var(--text-dim);font-size:14px;line-height:1.65;margin:0 0 14px;max
 .hero .tag{font-size:17px;color:var(--text);margin:0 0 18px}
 .hero .lede{color:var(--text-dim);font-size:15px;line-height:1.7;margin:0 auto;max-width:68ch}
 
-/* catalogue panels: one per row, hero picture left, summary right; a live panel is one link */
+/* catalog panels: one per row, hero picture left, summary right; a live panel is one link */
 .cards{display:flex;flex-direction:column;gap:14px;margin-top:18px}
 .card{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);background:var(--panel);overflow:hidden;
   border:1px solid var(--panel-border);border-left:3px solid var(--c);border-radius:10px;color:var(--text)}

@@ -1,4 +1,4 @@
-"""Copy one asteroid's non-convex mesh out of the asteroid catalogue's shards for the hero render.
+"""Copy one asteroid's non-convex mesh out of the asteroid catalog's shards for the hero render.
 
 Shard layout as the asteroid site's assets/common.js: shard = sum of the key's character codes % 64,
 <shard>.json maps key -> [offset, length] of a gzipped JSON record in <shard>.bin.

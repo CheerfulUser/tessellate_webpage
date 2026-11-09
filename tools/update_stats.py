@@ -1,9 +1,9 @@
-"""Headline numbers for the landing page, read from each catalogue's published site.
+"""Headline numbers for the landing page, read from each catalog's published site.
 
-The catalogue sites are the source of truth; this copies their counts into data/catalogs.json so
-the landing page loads one small file instead of each catalogue's full index (the asteroid index
-is several MB). Counts use the same definitions as each catalogue's own home page. Rerun after
-either catalogue is rebuilt:
+The catalog sites are the source of truth; this copies their counts into data/catalogs.json so
+the landing page loads one small file instead of each catalog's full index (the asteroid index
+is several MB). Counts use the same definitions as each catalog's own home page. Rerun after
+either catalog is rebuilt:
 
     python tools/update_stats.py
 """

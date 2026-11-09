@@ -4,11 +4,11 @@ Nominal TESS observing geometry (Ricker et al. 2015): each sector points a strip
 24 x 24 deg cameras along one ecliptic meridian, with boresights at ecliptic latitudes 18, 42, 66
 and 90 deg, and 13 sectors step around the pole in ecliptic longitude. Each footprint is a square
 in its camera's tangent (gnomonic) plane, drawn here in a Lambert azimuthal equal-area projection
-centred on the pole, so the outer cameras leave the real gaps near the ecliptic.
+centered on the pole, so the outer cameras leave the real gaps near the ecliptic.
 
 Tiles are inset slightly so each camera reads as its own tile, and drawn as translucent fills so
 overlapping sectors build up brightness the way TESS coverage depth does. Camera 4, which sits on
-the pole, is left out so the centre stays open.
+the pole, is left out so the center stays open.
 
 Writes assets/logo.svg (mark only; the wordmark is set in HTML) and the same mark as
 assets/favicon.svg.
@@ -31,7 +31,7 @@ SCALE = 100.0
 
 # cameras drawn, outermost first; camera 4 (on the pole) is left out
 CAMERAS = range(3)
-# one colour per drawn camera. Catalogue accents: transients orange, flares red, asteroids purple;
+# one color per drawn camera. Catalog accents: transients orange, flares red, asteroids purple;
 # no yellow
 CATALOG = ['#e09a5a', '#ff7b7b', '#a78bfa']
 MONO = ['#8fb4e6'] * 3
@@ -39,8 +39,8 @@ FILL_OPACITY = [0.36, 0.36, 0.34]
 
 
 def footprint(lon, lat, inset=1.0):
-    """Projected outline of one camera footprint centred at (lon, lat), in degrees; inset < 1
-    shrinks it about its boresight so neighbouring tiles separate."""
+    """Projected outline of one camera footprint centered at (lon, lat), in degrees; inset < 1
+    shrinks it about its boresight so neighboring tiles separate."""
     lo, la = np.radians(lon), np.radians(lat)
     b = np.array([np.cos(la) * np.cos(lo), np.cos(la) * np.sin(lo), np.sin(la)])
     e = np.array([-np.sin(lo), np.cos(lo), 0.0])
@@ -62,14 +62,14 @@ def path(x, y):
     return f'M{pts}Z'
 
 
-def tiles(colours):
+def tiles(colors):
     out = []
     for k in range(NSECT):
         # one sector points straight up
         lon = 90.0 + k * 360.0 / NSECT
         for c in CAMERAS:
             x, y = footprint(lon, LATS[c], INSET)
-            out.append(f'<path d="{path(x, y)}" fill="{colours[c]}" fill-opacity="{FILL_OPACITY[c]}"/>')
+            out.append(f'<path d="{path(x, y)}" fill="{colors[c]}" fill-opacity="{FILL_OPACITY[c]}"/>')
     return out
 
 
@@ -80,10 +80,10 @@ def svg(body, hw, hh):
 
 def main(variant='catalog'):
     out = Path(__file__).resolve().parent.parent / 'assets'
-    colours = CATALOG if variant == 'catalog' else MONO
+    colors = CATALOG if variant == 'catalog' else MONO
     # mark radius: the projected camera-1 corners
     half = round(SCALE * np.hypot(*footprint(90.0, LATS[0], INSET)).max() * 1.03, 1)
-    mark = svg(tiles(colours), half, half)
+    mark = svg(tiles(colors), half, half)
     (out / 'logo.svg').write_text(mark)
     (out / 'favicon.svg').write_text(mark)
     print(f'wrote {out / "logo.svg"} and {out / "favicon.svg"} ({variant})')
