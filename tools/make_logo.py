@@ -24,9 +24,11 @@ Usage: python tools/make_logo.py [variant]   variant: a key of VARIANTS (default
        python tools/make_logo.py --preview
        python tools/make_logo.py --loader
        python tools/make_logo.py --cover flare <flare site clone>/index.html
+       python tools/make_logo.py --favicon flare <flare site clone>/assets/favicon.svg
 
 With --cover it writes a catalog page's cover into that page (between its tss cover markers): the same animation
 in the catalog's colors (COVERS), shown over the page while it loads when it is opened from its card here.
+With --favicon it writes the logo in a catalog's COVERS colors as that catalog site's tab icon.
 """
 import sys
 from pathlib import Path
@@ -395,6 +397,14 @@ h1{{font-size:34px;margin:0;letter-spacing:-0.02em}}
 
 def main(variant=ADOPTED, *args):
     root = Path(__file__).resolve().parent.parent
+    if variant == '--favicon':
+        # the logo in a catalog's cover colors, as that catalog site's tab icon
+        catalog, out = args[0], Path(args[1])
+        scheme = dict(VARIANTS[ADOPTED], radial=COVERS[catalog]['radial'])
+        half = round(SCALE * np.hypot(*footprint(90.0, LATS[0], INSET)).max() * 1.03, 1)
+        out.write_text(svg(tiles(scheme, half), half, half))
+        print(f'wrote the {catalog} favicon to {out}')
+        return
     if variant == '--cover':
         catalog, page = args[0], Path(args[1])
         html = page.read_text()
