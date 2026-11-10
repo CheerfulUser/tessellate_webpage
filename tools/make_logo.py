@@ -16,8 +16,9 @@ preview page instead, and leaves the site's logo alone. A variant already writte
 as it is: to try changes, add a new variant rather than editing an old one.
 
 With --loader it writes the page's loading animation into index.html (between the loader markers):
-the adopted logo as inline SVG, its sectors fading in clockwise in observing order with the central
-highlight left out, then the highlight fading in. Timing and styling are in assets/site.css.
+the adopted logo as inline SVG with its own CSS, its sectors fading in clockwise in observing order
+with the central highlight left out, then the highlight coming in, then the logo and the overlay
+fading out. Timing is set by the constants above loader().
 Usage: python tools/make_logo.py [variant]   variant: a key of VARIANTS (default: the adopted
        dusk_white_edge_center_tight_white)
        python tools/make_logo.py --preview
@@ -270,22 +271,55 @@ def gradient(gid, stops, half):
     return f'<radialGradient id="{gid}" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="{half}">{s}</radialGradient>'
 
 
+# loading animation timing, seconds: sectors fade in clockwise STEP apart, each over SECTOR_IN; after
+# PAUSE the central highlight comes in over HIGHLIGHT_IN; the full logo holds for HOLD, fades to black
+# over LOGO_OUT, then the black overlay fades over OVERLAY_OUT to show the page. As in the GIFs, each
+# sector fades on its own (linearly), so the translucent stack keeps the many-times-overlapped middle
+# lit longest and the fade sweeps in from the edge rather than dimming the mark as one image
+STEP, SECTOR_IN, PAUSE, HIGHLIGHT_IN, HOLD, LOGO_OUT, OVERLAY_OUT = 0.11, 0.3, 0.15, 0.45, 0.4, 0.8, 0.4
+
+
 def loader(variant=ADOPTED):
-    """Inline SVG for the loading animation: each sector's tiles once in <defs>, drawn by a build group in
-    the plain gradient (one <use> per sector, --i = its place in the clockwise order) and a highlight
-    group in the logo's own gradient; site.css fades the build in and cross-fades to the highlight."""
+    """Inline SVG and its CSS for the loading animation. Each sector's tiles are drawn once by a <use>
+    (--i = its place in the clockwise order) in one gradient. The gradient starts as the plain one (no
+    central highlight) and its inner stops animate to the logo's own values, so the highlight comes in
+    without any cross-fade and the end state is exactly the logo."""
     scheme = VARIANTS[variant]
     half = round(SCALE * np.hypot(*footprint(90.0, LATS[0], INSET)).max() * 1.03, 1)
     ncam = len(scheme.get('cameras', CAMERAS))
     tiles_ = [path(x, y) for _, (x, y) in pointings(scheme)]
     sectors = [''.join(f'<path d="{d}"/>' for d in tiles_[k * ncam:(k + 1) * ncam]) for k in range(NSECT)]
-    defs = (gradient('ld-plain', plain(scheme)['radial'], half) + gradient('ld-hl', scheme['radial'], half)
-            + ''.join(f'<g id="ld-s{k}">{g}</g>' for k, g in enumerate(sectors)))
-    build = ''.join(f'<use href="#ld-s{k}" style="--i:{i}"/>' for i, k in enumerate(CLOCKWISE))
-    hl = ''.join(f'<use href="#ld-s{k}"/>' for k in range(NSECT))
-    return (f'<svg viewBox="{-half} {-half} {2 * half} {2 * half}" aria-hidden="true">'
-            f'<defs>{defs}</defs><g class="ld-build" fill="url(#ld-plain)">{build}</g>'
-            f'<g class="ld-hl" fill="url(#ld-hl)">{hl}</g></svg>')
+    # the plain gradient evaluated at the logo's own stop offsets
+    base = plain(scheme)['radial']
+    offs = [st[0] for st in base]
+    stops, keys = [], []
+    for i, (o, c, a) in enumerate(scheme['radial']):
+        c0, a0 = sample([st[:2] for st in base], o), round(float(np.interp(o, offs, [st[2] for st in base])), 3)
+        if (c0, a0) == (c, a) or o >= 0.45:
+            stops.append(f'<stop offset="{o}" stop-color="{c}" stop-opacity="{a}"/>')
+        else:
+            stops.append(f'<stop class="ld-k{i}" offset="{o}" stop-color="{c0}" stop-opacity="{a0}"/>')
+            keys.append((i, c, a))
+    built = (NSECT - 1) * STEP + SECTOR_IN
+    t_hl = built + PAUSE
+    t_out = t_hl + HIGHLIGHT_IN + HOLD
+    t_ov = t_out + LOGO_OUT
+    css = (f'#loader{{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;'
+           f'background:#000;animation:ld-out {OVERLAY_OUT}s ease {t_ov:.2f}s forwards}}'
+           f'#loader svg{{width:min(60vmin,400px);height:auto}}'
+           f'#loader use{{opacity:0;animation:ld-in {SECTOR_IN}s ease-out forwards,ld-fade {LOGO_OUT}s linear forwards;'
+           f'animation-delay:calc(var(--i) * {STEP}s),{t_out:.2f}s}}'
+           + ''.join(f'.ld-k{i}{{animation:ld-k{i} {HIGHLIGHT_IN}s ease {t_hl:.2f}s forwards}}'
+                     f'@keyframes ld-k{i}{{to{{stop-color:{c};stop-opacity:{a}}}}}' for i, c, a in keys)
+           + '@keyframes ld-in{to{opacity:1}}@keyframes ld-fade{to{opacity:0}}'
+           '@keyframes ld-out{to{opacity:0;visibility:hidden}}'
+           '@media (prefers-reduced-motion:reduce){#loader{display:none}}')
+    grad = (f'<radialGradient id="ld-g" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="{half}">'
+            + ''.join(stops) + '</radialGradient>')
+    defs = grad + ''.join(f'<g id="ld-s{k}">{g}</g>' for k, g in enumerate(sectors))
+    uses = ''.join(f'<use href="#ld-s{k}" style="--i:{i}"/>' for i, k in enumerate(CLOCKWISE))
+    return (f'<style>{css}</style><svg viewBox="{-half} {-half} {2 * half} {2 * half}" aria-hidden="true">'
+            f'<defs>{defs}</defs><g fill="url(#ld-g)">{uses}</g></svg>')
 
 
 PREVIEW_ROW = """<div class="row"><p>{v}</p>
