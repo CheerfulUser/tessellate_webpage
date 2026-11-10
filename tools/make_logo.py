@@ -284,7 +284,8 @@ def gradient(gid, stops, half):
 # left a beat of empty black screen before the page appeared (Hugh: a slight delay, then a jump). As in the GIFs,
 # each sector fades on its own (linearly), so the translucent stack keeps the many-times-overlapped middle
 # lit longest and the fade sweeps in from the edge rather than dimming the mark as one image
-STEP, SECTOR_IN, PAUSE, HIGHLIGHT_IN, HOLD, LOGO_OUT, OVERLAY_OUT = 0.11, 0.3, 0.15, 0.45, 0.4, 0.8, 0.6
+# scaled together so the whole loader takes 2 s (it was 3.6 s at 0.11, 0.3, 0.15, 0.45, 0.4, 0.8, 0.6)
+STEP, SECTOR_IN, PAUSE, HIGHLIGHT_IN, HOLD, LOGO_OUT, OVERLAY_OUT = 0.061, 0.17, 0.08, 0.25, 0.22, 0.45, 0.34
 OVERLAP = 0.45
 
 
@@ -350,12 +351,13 @@ COVERS = {
               'radial': [(0.17, '#ffe09a', 0.85), (0.185, '#f3c35a', 0.68), (0.21, '#e8823f', 0.5), (0.45, '#c2414a', 0.55),
                          (0.64, '#ff7b7b', 0.7), (0.86, '#f3c35a', 0.88), (1.0, '#fff0c8', 0.95)]},
 }
-# cover timing, seconds: sectors fade in clockwise COVER_STEP apart, each over SECTOR_IN, from the moment the page
-# shows; once the page has loaded (and the mark has held at least COVER_HOLD), the logo fades over LOGO_OUT while
-# the ground goes from black to the catalog's background, and the cover clears over OVERLAY_OUT, starting OVERLAP
+# cover timing, seconds: sectors fade in clockwise COVER_STEP apart, each over COVER_IN, from the moment the page
+# shows; once the page has loaded (and the mark has held at least COVER_HOLD), the logo fades over COVER_OUT while
+# the ground goes from black to the catalog's background, and the cover clears over COVER_CLEAR, starting OVERLAP
 # of the way through the logo's fade (as the loader). The page's own
-# script starts the fade out (the 'out' class) and sets the minimum time from COVER_STEP, SECTOR_IN and COVER_HOLD
-COVER_STEP, COVER_HOLD = 0.07, 0.3
+# script starts the fade out (the 'out' class) and sets the minimum time from COVER_STEP, COVER_IN and COVER_HOLD.
+# Kept separate from the loader's timing, which is faster
+COVER_STEP, COVER_HOLD, COVER_IN, COVER_OUT, COVER_CLEAR = 0.07, 0.3, 0.3, 0.8, 0.6
 
 
 def cover(catalog='flare', variant=ADOPTED):
@@ -367,10 +369,10 @@ def cover(catalog='flare', variant=ADOPTED):
            'html.from-tss #tss-cover{position:fixed;inset:0;z-index:100;display:flex;align-items:center;'
            'justify-content:center;background:#000;will-change:opacity}'   # its own layer from the start, as the loader
            '#tss-cover svg{width:min(60vmin,400px);height:auto}'
-           f'#tss-cover use{{opacity:0;animation:tc-in {SECTOR_IN}s ease-out forwards;'
+           f'#tss-cover use{{opacity:0;animation:tc-in {COVER_IN}s ease-out forwards;'
            f'animation-delay:calc(var(--i) * {COVER_STEP}s)}}'
-           f'#tss-cover.out{{animation:tc-ground {LOGO_OUT}s ease forwards,tc-clear {OVERLAY_OUT}s ease {OVERLAP * LOGO_OUT:.2f}s forwards}}'
-           f'#tss-cover.out use{{opacity:1;animation:tc-fade {LOGO_OUT}s linear forwards}}'
+           f'#tss-cover.out{{animation:tc-ground {COVER_OUT}s ease forwards,tc-clear {COVER_CLEAR}s ease {OVERLAP * COVER_OUT:.2f}s forwards}}'
+           f'#tss-cover.out use{{opacity:1;animation:tc-fade {COVER_OUT}s linear forwards}}'
            '@keyframes tc-in{to{opacity:1}}@keyframes tc-fade{to{opacity:0}}'
            f'@keyframes tc-ground{{to{{background-color:{c["ground"]}}}}}'
            '@keyframes tc-clear{to{opacity:0;visibility:hidden}}'
