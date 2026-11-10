@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09",
+ "updated": "2026-11-10",
  "asteroid": {
   "periods": 16427,
   "shape_models": 14768,
@@ -16,6 +16,10 @@
   "flares": 184720,
   "gold": 133118,
   "silver_sources": 29761,
+  "silver_flares": 50819,
+  "sources_all": 102843,
+  "flares_all": 235539,
+  "with_energy": 167861,
   "sectors": [
    27,
    55

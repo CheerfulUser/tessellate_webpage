@@ -55,6 +55,11 @@ def flares():
         'flares': k['flares'],
         'gold': k['gold'],
         'silver_sources': k['silver_sources'],
+        'silver_flares': k['silver_flares'],
+        # the flare site's headline panels: gold stars + silver sources, and the flares on both
+        'sources_all': k['stars'] + k['silver_sources'],
+        'flares_all': k['flares'] + k['silver_flares'],
+        'with_energy': k['n_energy'],
         'sectors': [min(j['sectors']), max(j['sectors'])],
         'build': j['build'],
     }
