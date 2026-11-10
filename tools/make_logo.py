@@ -15,7 +15,7 @@ assets/favicon.svg. With --preview it writes each variant to tools/logo_variants
 preview page instead, and leaves the site's logo alone. A variant already written there is kept
 as it is: to try changes, add a new variant rather than editing an old one.
 Usage: python tools/make_logo.py [variant]   variant: a key of VARIANTS (default: the adopted
-       dusk_white_edge_center_tight)
+       dusk_white_edge_center_tight_white)
        python tools/make_logo.py --preview
 """
 import sys
@@ -268,7 +268,7 @@ h1{{font-size:34px;margin:0;letter-spacing:-0.02em}}
 """
 
 
-def main(variant='dusk_white_edge_center_tight'):
+def main(variant='dusk_white_edge_center_tight_white'):
     root = Path(__file__).resolve().parent.parent
     if variant == '--preview':
         out = root / 'tools' / 'logo_variants'

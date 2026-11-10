@@ -30,9 +30,9 @@ The card numbers do not: rerun `python tools/update_stats.py` after a catalog is
 
 The mark is the TESS camera footprints of one hemisphere seen from the ecliptic pole: four 24 deg cameras per
 sector at ecliptic latitudes 18, 42, 66 and 90 deg, and 13 sectors around the pole, in an equal-area polar
-projection, leaving out the pole camera so the center is open. The adopted coloring (`dusk_white_edge_center_tight`)
-is one smooth translucent gradient from white at the edge through blue to violet at the center, with a light violet
-highlight around the open center. `python tools/make_logo.py <variant>` writes another variant to the site;
+projection, leaving out the pole camera so the center is open. The adopted coloring (`dusk_white_edge_center_tight_white`)
+is one smooth translucent gradient from white across the outer ring through blue to violet at the center, with a
+light violet highlight around the open center. `python tools/make_logo.py <variant>` writes another variant to the site;
 `python tools/make_logo.py --preview` writes every variant to `tools/logo_variants/` for comparison.
 
 ## Adding a catalog
