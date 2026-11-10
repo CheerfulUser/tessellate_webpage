@@ -149,6 +149,7 @@ footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--hairline);fon
 /* catalog transition (index.html): the loading animation (#loader, which stays in the page once it has played)
    fades the screen to black when a card with data-warp is clicked, then the catalog opens and plays the logo itself */
 #loader.done,#loader.done use{animation:none;visibility:hidden}
+#loader.done{will-change:auto}
 #loader.warp{visibility:visible;animation:wp-show .3s ease both}
 #loader.warp svg{display:none}
 @keyframes wp-show{from{opacity:0}}

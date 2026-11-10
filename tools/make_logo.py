@@ -279,10 +279,13 @@ def gradient(gid, stops, half):
 
 # loading animation timing, seconds: sectors fade in clockwise STEP apart, each over SECTOR_IN; after
 # PAUSE the central highlight comes in over HIGHLIGHT_IN; the full logo holds for HOLD, fades to black
-# over LOGO_OUT, then the black overlay fades over OVERLAY_OUT to show the page. As in the GIFs, each
-# sector fades on its own (linearly), so the translucent stack keeps the many-times-overlapped middle
+# over LOGO_OUT, and the black overlay fades over OVERLAY_OUT to show the page, starting OVERLAP of the way through
+# the logo's fade: the tail of a linear fade is nearly black, so starting the overlay only once the logo had gone
+# left a beat of empty black screen before the page appeared (Hugh: a slight delay, then a jump). As in the GIFs,
+# each sector fades on its own (linearly), so the translucent stack keeps the many-times-overlapped middle
 # lit longest and the fade sweeps in from the edge rather than dimming the mark as one image
-STEP, SECTOR_IN, PAUSE, HIGHLIGHT_IN, HOLD, LOGO_OUT, OVERLAY_OUT = 0.11, 0.3, 0.15, 0.45, 0.4, 0.8, 0.4
+STEP, SECTOR_IN, PAUSE, HIGHLIGHT_IN, HOLD, LOGO_OUT, OVERLAY_OUT = 0.11, 0.3, 0.15, 0.45, 0.4, 0.8, 0.6
+OVERLAP = 0.45
 
 
 def sector_paths(scheme):
@@ -314,9 +317,12 @@ def loader(variant=ADOPTED):
     built = (NSECT - 1) * STEP + SECTOR_IN
     t_hl = built + PAUSE
     t_out = t_hl + HIGHLIGHT_IN + HOLD
-    t_ov = t_out + LOGO_OUT
+    t_ov = t_out + OVERLAP * LOGO_OUT
+    # will-change: the overlay gets its own layer from the start; otherwise Chrome makes one (and redraws the whole
+    # logo for it) only when the overlay's fade begins, which stalled the animation for ~0.25 s at full-screen retina
+    # size, so the half-faded logo popped out and the page appeared after a black beat (Hugh's screen recording)
     css = (f'#loader{{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;'
-           f'background:#000;animation:ld-out {OVERLAY_OUT}s ease {t_ov:.2f}s forwards}}'
+           f'background:#000;will-change:opacity;animation:ld-out {OVERLAY_OUT}s ease {t_ov:.2f}s forwards}}'
            f'#loader svg{{width:min(60vmin,400px);height:auto}}'
            f'#loader use{{opacity:0;animation:ld-in {SECTOR_IN}s ease-out forwards,ld-fade {LOGO_OUT}s linear forwards;'
            f'animation-delay:calc(var(--i) * {STEP}s),{t_out:.2f}s}}'
@@ -344,7 +350,8 @@ COVERS = {
 }
 # cover timing, seconds: sectors fade in clockwise COVER_STEP apart, each over SECTOR_IN, from the moment the page
 # shows; once the page has loaded (and the mark has held at least COVER_HOLD), the logo fades over LOGO_OUT while
-# the ground goes from black to the catalog's background, then the cover clears over OVERLAY_OUT. The page's own
+# the ground goes from black to the catalog's background, and the cover clears over OVERLAY_OUT, starting OVERLAP
+# of the way through the logo's fade (as the loader). The page's own
 # script starts the fade out (the 'out' class) and sets the minimum time from COVER_STEP, SECTOR_IN and COVER_HOLD
 COVER_STEP, COVER_HOLD = 0.07, 0.3
 
@@ -356,11 +363,11 @@ def cover(catalog='flare', variant=ADOPTED):
     half, sectors = sector_paths(VARIANTS[variant])
     css = ('#tss-cover{display:none}'
            'html.from-tss #tss-cover{position:fixed;inset:0;z-index:100;display:flex;align-items:center;'
-           'justify-content:center;background:#000}'
+           'justify-content:center;background:#000;will-change:opacity}'   # its own layer from the start, as the loader
            '#tss-cover svg{width:min(60vmin,400px);height:auto}'
            f'#tss-cover use{{opacity:0;animation:tc-in {SECTOR_IN}s ease-out forwards;'
            f'animation-delay:calc(var(--i) * {COVER_STEP}s)}}'
-           f'#tss-cover.out{{animation:tc-ground {LOGO_OUT}s ease forwards,tc-clear {OVERLAY_OUT}s ease {LOGO_OUT}s forwards}}'
+           f'#tss-cover.out{{animation:tc-ground {LOGO_OUT}s ease forwards,tc-clear {OVERLAY_OUT}s ease {OVERLAP * LOGO_OUT:.2f}s forwards}}'
            f'#tss-cover.out use{{opacity:1;animation:tc-fade {LOGO_OUT}s linear forwards}}'
            '@keyframes tc-in{to{opacity:1}}@keyframes tc-fade{to{opacity:0}}'
            f'@keyframes tc-ground{{to{{background-color:{c["ground"]}}}}}'
