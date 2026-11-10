@@ -23,12 +23,15 @@ Usage: python tools/make_logo.py [variant]   variant: a key of VARIANTS (default
        dusk_white_edge_center_tight_white)
        python tools/make_logo.py --preview
        python tools/make_logo.py --loader
+       python tools/make_logo.py --cover flare <flare site clone>/index.html
+
+With --cover it writes a catalog page's cover into that page (between its tss cover markers): the same animation
+in the catalog's colors (COVERS), shown over the page while it loads when it is opened from its card here.
 """
 import sys
 from pathlib import Path
 
 import numpy as np
-from shapely.geometry import Polygon
 
 # camera half-width in the tangent plane
 HALF = np.tan(np.radians(12.0))
@@ -203,6 +206,7 @@ def pointings(scheme):
 
 def overlaps(scheme):
     """Regions covered by two or more pointings, as one polygon per overlapping pair."""
+    from shapely.geometry import Polygon     # only these variants need shapely; the loader and cover don't
     polys = [Polygon(np.column_stack(xy)) for _, xy in pointings(scheme)]
     pairs = (a.intersection(b) for i, a in enumerate(polys) for b in polys[i + 1:])
     return [g for g in pairs if g.geom_type == 'Polygon' and g.area > 0]
@@ -279,16 +283,21 @@ def gradient(gid, stops, half):
 STEP, SECTOR_IN, PAUSE, HIGHLIGHT_IN, HOLD, LOGO_OUT, OVERLAY_OUT = 0.11, 0.3, 0.15, 0.45, 0.4, 0.8, 0.4
 
 
+def sector_paths(scheme):
+    """Half-width of the animated mark's view box, and each sector's tiles as SVG paths (sector k at index k)."""
+    half = round(SCALE * np.hypot(*footprint(90.0, LATS[0], INSET)).max() * 1.03, 1)
+    ncam = len(scheme.get('cameras', CAMERAS))
+    tiles_ = [path(x, y) for _, (x, y) in pointings(scheme)]
+    return half, [''.join(f'<path d="{d}"/>' for d in tiles_[k * ncam:(k + 1) * ncam]) for k in range(NSECT)]
+
+
 def loader(variant=ADOPTED):
     """Inline SVG and its CSS for the loading animation. Each sector's tiles are drawn once by a <use>
     (--i = its place in the clockwise order) in one gradient. The gradient starts as the plain one (no
     central highlight) and its inner stops animate to the logo's own values, so the highlight comes in
     without any cross-fade and the end state is exactly the logo."""
     scheme = VARIANTS[variant]
-    half = round(SCALE * np.hypot(*footprint(90.0, LATS[0], INSET)).max() * 1.03, 1)
-    ncam = len(scheme.get('cameras', CAMERAS))
-    tiles_ = [path(x, y) for _, (x, y) in pointings(scheme)]
-    sectors = [''.join(f'<path d="{d}"/>' for d in tiles_[k * ncam:(k + 1) * ncam]) for k in range(NSECT)]
+    half, sectors = sector_paths(scheme)
     # the plain gradient evaluated at the logo's own stop offsets
     base = plain(scheme)['radial']
     offs = [st[0] for st in base]
@@ -322,6 +331,48 @@ def loader(variant=ADOPTED):
             f'<defs>{defs}</defs><g fill="url(#ld-g)">{uses}</g></svg>')
 
 
+# catalog covers: a catalog page arriving from its card on this site plays the logo in that catalog's colors over
+# itself while it loads. Per catalog: its page background, and the logo gradient's stops (offset, color, opacity),
+# center to edge, at the adopted logo's offsets. Flares: gold edge and highlight around a red body, from the flare
+# site's accent (#ff7b7b), deep red (#c2414a) and gold (243,195,90)
+COVERS = {
+    'flare': {'ground': '#130609',
+              'radial': [(0.17, '#ffe09a', 0.85), (0.185, '#f3c35a', 0.68), (0.21, '#e8823f', 0.5), (0.45, '#c2414a', 0.55),
+                         (0.64, '#ff7b7b', 0.7), (0.86, '#f3c35a', 0.88), (1.0, '#fff0c8', 0.95)]},
+}
+# cover timing, seconds: sectors fade in clockwise COVER_STEP apart, each over SECTOR_IN, from the moment the page
+# shows; once the page has loaded (and the mark has held at least COVER_HOLD), the logo fades over LOGO_OUT while
+# the ground goes from black to the catalog's background, then the cover clears over OVERLAY_OUT. The page's own
+# script starts the fade out (the 'out' class) and sets the minimum time from COVER_STEP, SECTOR_IN and COVER_HOLD
+COVER_STEP, COVER_HOLD = 0.07, 0.3
+
+
+def cover(catalog='flare', variant=ADOPTED):
+    """Inline SVG and its CSS for a catalog page's cover (#tss-cover). Hidden unless the page's <html> has the
+    from-tss class, which the page sets when it is opened from its card here."""
+    c = COVERS[catalog]
+    half, sectors = sector_paths(VARIANTS[variant])
+    css = ('#tss-cover{display:none}'
+           'html.from-tss #tss-cover{position:fixed;inset:0;z-index:100;display:flex;align-items:center;'
+           'justify-content:center;background:#000}'
+           '#tss-cover svg{width:min(60vmin,400px);height:auto}'
+           f'#tss-cover use{{opacity:0;animation:tc-in {SECTOR_IN}s ease-out forwards;'
+           f'animation-delay:calc(var(--i) * {COVER_STEP}s)}}'
+           f'#tss-cover.out{{animation:tc-ground {LOGO_OUT}s ease forwards,tc-clear {OVERLAY_OUT}s ease {LOGO_OUT}s forwards}}'
+           f'#tss-cover.out use{{opacity:1;animation:tc-fade {LOGO_OUT}s linear forwards}}'
+           '@keyframes tc-in{to{opacity:1}}@keyframes tc-fade{to{opacity:0}}'
+           f'@keyframes tc-ground{{to{{background-color:{c["ground"]}}}}}'
+           '@keyframes tc-clear{to{opacity:0;visibility:hidden}}'
+           '@media (prefers-reduced-motion:reduce){html.from-tss #tss-cover{display:none}}')
+    grad = (f'<radialGradient id="tc-g" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="{half}">'
+            + ''.join(f'<stop offset="{o}" stop-color="{col}" stop-opacity="{a}"/>' for o, col, a in c['radial'])
+            + '</radialGradient>')
+    defs = grad + ''.join(f'<g id="tc-s{k}">{g}</g>' for k, g in enumerate(sectors))
+    uses = ''.join(f'<use href="#tc-s{k}" style="--i:{i}"/>' for i, k in enumerate(CLOCKWISE))
+    return (f'<style>{css}</style><svg viewBox="{-half} {-half} {2 * half} {2 * half}" aria-hidden="true">'
+            f'<defs>{defs}</defs><g fill="url(#tc-g)">{uses}</g></svg>')
+
+
 PREVIEW_ROW = """<div class="row"><p>{v}</p>
   <div class="lockup"><img class="big" src="{v}.svg"><h1>TESSELLATE <span>Sky Survey</span></h1></div>
   <div class="small"><span class="brand"><img src="{v}.svg">TSS</span><img class="fav" src="{v}.svg"></div></div>"""
@@ -342,8 +393,16 @@ h1{{font-size:34px;margin:0;letter-spacing:-0.02em}}
 """
 
 
-def main(variant=ADOPTED):
+def main(variant=ADOPTED, *args):
     root = Path(__file__).resolve().parent.parent
+    if variant == '--cover':
+        catalog, page = args[0], Path(args[1])
+        html = page.read_text()
+        a, b = '<!-- tss cover: generated by tessellate-sky-survey.github.io/tools/make_logo.py --cover -->', '<!-- /tss cover -->'
+        i, j = html.index(a) + len(a), html.index(b)
+        page.write_text(html[:i] + '\n<div id="tss-cover" aria-hidden="true">' + cover(catalog) + '</div>\n' + html[j:])
+        print(f'wrote the {catalog} cover into {page}')
+        return
     if variant == '--loader':
         page = root / 'index.html'
         html = page.read_text()

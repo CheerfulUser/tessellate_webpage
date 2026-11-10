@@ -147,26 +147,8 @@ footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--hairline);fon
 }
 
 /* catalog transition (index.html): the loading animation (#loader, which stays in the page once it has played)
-   replays when a card with data-warp is clicked: the screen goes black, the logo's sectors come in clockwise in
-   that catalog's colors, then the logo fades as the screen blends into the catalog's background (--ground); the
-   catalog opens at the end */
+   fades the screen to black when a card with data-warp is clicked, then the catalog opens and plays the logo itself */
 #loader.done,#loader.done use{animation:none;visibility:hidden}
-#loader.warp{visibility:visible;animation:wp-show .3s ease both,wp-ground .7s ease 1.6s forwards}
-#loader.warp use{animation:wp-in .3s ease-out both,wp-fade .7s linear 1.6s forwards;
-  animation-delay:calc(.2s + var(--i) * .07s),1.6s}
-/* the logo gradient's stops, center to edge; stop the loader's highlight animation so these take over */
-#loader.warp stop{animation:none}
+#loader.warp{visibility:visible;animation:wp-show .3s ease both}
+#loader.warp svg{display:none}
 @keyframes wp-show{from{opacity:0}}
-@keyframes wp-in{from{opacity:0}to{opacity:1}}
-@keyframes wp-fade{to{opacity:0}}
-@keyframes wp-ground{to{background-color:var(--ground)}}
-/* flares: the flare site's dark red ground; gold edge and highlight around a red body, from the site's
-   accent (#ff7b7b), deep red (#c2414a) and gold (243,195,90) */
-#loader[data-warp=flare]{--ground:#130609}
-#loader[data-warp=flare] stop:nth-child(1){stop-color:#ffe09a;stop-opacity:.85}
-#loader[data-warp=flare] stop:nth-child(2){stop-color:#f3c35a;stop-opacity:.68}
-#loader[data-warp=flare] stop:nth-child(3){stop-color:#e8823f;stop-opacity:.5}
-#loader[data-warp=flare] stop:nth-child(4){stop-color:#c2414a;stop-opacity:.55}
-#loader[data-warp=flare] stop:nth-child(5){stop-color:#ff7b7b;stop-opacity:.7}
-#loader[data-warp=flare] stop:nth-child(6){stop-color:#f3c35a;stop-opacity:.88}
-#loader[data-warp=flare] stop:nth-child(7){stop-color:#fff0c8;stop-opacity:.95}
