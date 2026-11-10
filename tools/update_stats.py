@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.request import urlopen
 
 ASTEROID = 'https://cheerfuluser.github.io/tessellate_asteroid/'
-FLARES = 'https://hughroxburgh.github.io/tessellate_flares/'
+FLARES = 'https://tessellate-sky-survey.github.io/flare_stars/'
 
 
 def fetch(url):

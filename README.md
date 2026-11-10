@@ -7,7 +7,7 @@ Links the live catalog sites and holds placeholders for those in preparation.
 | catalog | site |
 |---|---|
 | Asteroid rotation & shape | <https://cheerfuluser.github.io/tessellate_asteroid/> |
-| Stellar flares | <https://hughroxburgh.github.io/tessellate_flares/> |
+| Stellar flares | <https://tessellate-sky-survey.github.io/flare_stars/> |
 | Variable stars, transients, exoplanets | in preparation |
 
 The site is static and served by GitHub Pages from the repository root; there is no build step on GitHub.
