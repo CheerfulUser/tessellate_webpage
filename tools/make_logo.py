@@ -318,11 +318,13 @@ def loader(variant=ADOPTED):
     t_hl = built + PAUSE
     t_out = t_hl + HIGHLIGHT_IN + HOLD
     t_ov = t_out + OVERLAP * LOGO_OUT
-    # will-change: the overlay gets its own layer from the start; otherwise Chrome makes one (and redraws the whole
-    # logo for it) only when the overlay's fade begins, which stalled the animation for ~0.25 s at full-screen retina
-    # size, so the half-faded logo popped out and the page appeared after a black beat (Hugh's screen recording)
+    # Hugh's screen recording showed a ~0.25 s stall as the overlay's fade began: the half-faded logo popped out and
+    # the page came in after a black beat. A fully opaque overlay lets Chrome skip drawing the page under it, so the
+    # whole page (card images, blurred top bar) was first drawn in that frame. So the overlay is 0.999 opaque (looks
+    # the same; the page stays drawn underneath from the start) on its own layer (will-change), and index.html asks
+    # for the page's images to be decoded straight away
     css = (f'#loader{{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;'
-           f'background:#000;will-change:opacity;animation:ld-out {OVERLAY_OUT}s ease {t_ov:.2f}s forwards}}'
+           f'background:#000;opacity:.999;will-change:opacity;animation:ld-out {OVERLAY_OUT}s ease {t_ov:.2f}s forwards}}'
            f'#loader svg{{width:min(60vmin,400px);height:auto}}'
            f'#loader use{{opacity:0;animation:ld-in {SECTOR_IN}s ease-out forwards,ld-fade {LOGO_OUT}s linear forwards;'
            f'animation-delay:calc(var(--i) * {STEP}s),{t_out:.2f}s}}'
