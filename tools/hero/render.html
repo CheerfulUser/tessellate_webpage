@@ -2,14 +2,14 @@
 <!-- Hero render of an asteroid shape model (mesh.json from export_mesh.py): raking key light with
      shadows so the concavities read, a faint cool rim light, transparent background.
      URL parameters (degrees): az, el = camera direction; laz, lel = key light direction relative
-     to the camera; w, h = pixels. Driven by render_hero.sh. -->
+     to the camera; w, h = pixels; mesh = the exported file (default mesh.json). Driven by render_hero.sh. -->
 <style>html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}</style>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
 const q = new URL(location.href).searchParams, num = (k, d) => +(q.get(k) ?? d);
 const W = num('w', 900), H = num('h', 700), rad = Math.PI / 180;
-const m = await fetch('mesh.json').then(r => r.json());
+const m = await fetch(q.get('mesh') || 'mesh.json').then(r => r.json());
 
 const geo = new THREE.BufferGeometry();
 geo.setAttribute('position', new THREE.Float32BufferAttribute(m.v.map(x => x * m.s), 3));

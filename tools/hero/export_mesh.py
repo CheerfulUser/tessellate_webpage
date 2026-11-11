@@ -21,7 +21,8 @@ def main(repo, key):
         f.seek(off)
         rec = json.loads(gzip.decompress(f.read(n)))
     nc = rec['nc']
-    out = Path(__file__).resolve().parent / 'mesh.json'
+    # one file per object, so exporting another never replaces a mesh an existing render uses
+    out = Path(__file__).resolve().parent / f'mesh_{key}.json'
     out.write_text(json.dumps({'key': key, 'name': rec['d'], 's': nc['s'], 'v': nc['v'], 'f': nc['f']}))
     print(f'wrote {out}: {rec["d"]}, {len(nc["v"]) // 3} vertices, {len(nc["f"]) // 3} faces')
 
